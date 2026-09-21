@@ -1,9 +1,16 @@
 // 削除イベントをグローバルスコープに公開
-window.deleteEvent = function(index) {
+window.deleteEvent = function(dateKey, index) {
     const events = JSON.parse(localStorage.getItem('events')) || [];
-    events.splice(index, 1);
-    localStorage.setItem('events', JSON.stringify(events));
-    window.refreshCalendar();
+    const dayEvents = events.filter(event => `${event.year}-${event.month}-${event.day}` === dateKey);
+    if (index >= 0 && index < dayEvents.length) {
+        const eventToRemove = dayEvents[index];
+        const eventIndexInEvents = events.findIndex(event => event.id === eventToRemove.id);
+        if (eventIndexInEvents !== -1) {
+            events.splice(eventIndexInEvents, 1);
+            localStorage.setItem('events', JSON.stringify(events));
+            window.refreshCalendar();
+        }
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -39,13 +46,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     const dayEvents = getEventsForDate(currentYear, currentMonth + 1, day);
                     let dayEventsHtml = '';
-                    dayEvents.forEach((event, index) => {
-                        dayEventsHtml += `<div class="event">
-                            ${event.title} 
-                            <button class="delete-button" onclick="event.stopPropagation(); deleteEvent(${index})" style="font-size: 10px;">×</button>
+                    dayEvents.forEach((event, idx) => {
+                        // 【★最大の修正ポイント】
+                        // 予定のタイトルを <span class="event-text"> で囲みました。
+                        // これにより、CSSの切り詰め（...）の魔法が文字だけに100%効くようになり、×ボタンを守ります。
+                        dayEventsHtml += `
+                        <div class="event">
+                            <span class="event-text">${event.title}</span> 
+                            <button class="delete-button" onclick="event.stopPropagation(); deleteEvent('${currentYear}-${currentMonth + 1}-${day}', ${idx})">×</button>
                         </div>`;
                     });
-                    row += `<td onclick="openScheduleModal(${currentYear}, ${currentMonth + 1}, ${day})">${day}${dayEventsHtml}</td>`;
+                    row += `<td onclick="openScheduleModal(${currentYear}, ${currentMonth + 1}, ${day})">
+                                <div class="date-num">${day}</div>
+                                ${dayEventsHtml}
+                            </td>`;
                     day++;
                 }
             }
@@ -83,8 +97,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    closeModal.onclick = function() {
-        scheduleModal.style.display = 'none';
+    if (closeModal) {
+        closeModal.onclick = function() {
+            scheduleModal.style.display = 'none';
+        }
     }
 
     window.onclick = function(event) {
@@ -101,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = document.getElementById('month').value;
         const day = document.getElementById('day').value;
 
-        const event = { title, time, memo, year, month, day };
+        const event = { title, time, memo, year, month, day, id: Date.now().toString() };
         saveEvent(event);
         renderCalendar();
         scheduleModal.style.display = 'none';
