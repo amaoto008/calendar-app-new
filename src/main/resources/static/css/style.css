@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 800px;
+    position: relative;
+}
+input {
+    padding: 8px;
+    margin: 5px;
+    width: 200px;
+}
+button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover { background-color: #0056b3; }
+#calendarTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+#calendarTable th, #calendarTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    width: 14.28%; /* Ensures each column takes up 1/7 of the width */
+    height: 100px; /* Fixed height for each cell */
+    position: relative;
+    overflow: hidden;
+}
+#calendarTable td { cursor: pointer; }
+#calendarTable td:hover { background-color: #f0f0f0; }
+#calendarTable th:nth-child(1), #calendarTable td:nth-child(1) { color: red; } /* Sunday */
+#calendarTable th:nth-child(7), #calendarTable td:nth-child(7) { color: blue; } /* Saturday */
+.event {
+    font-size: 16px; /* Increased font size for events */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.delete-button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 10px;
+    display: inline-block;
+    margin-left: 5px;
+}
+#controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#logoutContainer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

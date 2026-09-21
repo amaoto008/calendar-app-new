@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Calendar</h1>
+    <div id="controls">
+        <button id="prevMonth">前月</button>
+        <span id="monthYear"></span>
+        <button id="nextMonth">次月</button>
+    </div>
+    <table id="calendarTable">
+        <thead>
+        <tr>
+            <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+        </tr>
+        </thead>
+        <tbody id="calendarBody"></tbody>
+    </table>
+    <form th:action="@{/logout}" method="post" style="margin-top: 20px;">
+        <button type="submit" style="background-color: #dc3545;">Logout</button>
+    </form>
+</div>
+<script src="/js/script.js"></script>
+</body>
+</html>

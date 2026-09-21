@@ -1,0 +1,127 @@
+// 削除イベントをグローバルスコープに公開
+window.deleteEvent = function(index) {
+    const events = JSON.parse(localStorage.getItem('events')) || [];
+    events.splice(index, 1);
+    localStorage.setItem('events', JSON.stringify(events));
+    window.refreshCalendar();
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const prevMonthButton = document.getElementById('prevMonth');
+    const nextMonthButton = document.getElementById('nextMonth');
+    const monthYear = document.getElementById('monthYear');
+    const calendarBody = document.getElementById('calendarBody');
+    const scheduleModal = document.getElementById('scheduleModal');
+    const closeModal = document.querySelector('.close-button');
+    const saveScheduleButton = document.getElementById('saveSchedule');
+    const logoutButton = document.getElementById('logoutButton');
+
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    // renderCalendar 関数を定義
+    function renderCalendar() {
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+        monthYear.textContent = `${currentYear}年 ${currentMonth + 1}月`;
+
+        let html = '';
+        let day = 1;
+
+        for (let i = 0; i < 6; i++) {
+            let row = '<tr>';
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDay) {
+                    row += '<td></td>';
+                } else if (day > lastDate) {
+                    row += '<td></td>';
+                } else {
+                    const dayEvents = getEventsForDate(currentYear, currentMonth + 1, day);
+                    let dayEventsHtml = '';
+                    dayEvents.forEach((event, index) => {
+                        dayEventsHtml += `<div class="event">
+                            ${event.title} 
+                            <button class="delete-button" onclick="event.stopPropagation(); deleteEvent(${index})" style="font-size: 10px;">×</button>
+                        </div>`;
+                    });
+                    row += `<td onclick="openScheduleModal(${currentYear}, ${currentMonth + 1}, ${day})">${day}${dayEventsHtml}</td>`;
+                    day++;
+                }
+            }
+            row += '</tr>';
+            html += row;
+            if (day > lastDate) break;
+        }
+        calendarBody.innerHTML = html;
+    }
+
+    // renderCalendar をグローバルスコープに公開
+    window.refreshCalendar = renderCalendar;
+
+    renderCalendar();
+
+    if (prevMonthButton) {
+        prevMonthButton.addEventListener('click', function() {
+            currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            if (currentMonth === 11) currentYear--;
+            renderCalendar();
+        });
+    }
+
+    if (nextMonthButton) {
+        nextMonthButton.addEventListener('click', function() {
+            currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+            if (currentMonth === 0) currentYear++;
+            renderCalendar();
+        });
+    }
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            window.location.href = '/logout';
+        });
+    }
+
+    closeModal.onclick = function() {
+        scheduleModal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == scheduleModal) {
+            scheduleModal.style.display = 'none';
+        }
+    }
+
+    saveScheduleButton.addEventListener('click', function() {
+        const title = document.getElementById('title').value;
+        const time = document.getElementById('time').value;
+        const memo = document.getElementById('memo').value;
+        const year = document.getElementById('year').value;
+        const month = document.getElementById('month').value;
+        const day = document.getElementById('day').value;
+
+        const event = { title, time, memo, year, month, day };
+        saveEvent(event);
+        renderCalendar();
+        scheduleModal.style.display = 'none';
+    });
+
+    function getEventsForDate(year, month, day) {
+        const events = JSON.parse(localStorage.getItem('events')) || [];
+        return events.filter(event => event.year == year && event.month == month && event.day == day);
+    }
+
+    function saveEvent(event) {
+        const events = JSON.parse(localStorage.getItem('events')) || [];
+        events.push(event);
+        localStorage.setItem('events', JSON.stringify(events));
+    }
+});
+
+function openScheduleModal(year, month, day) {
+    document.getElementById('year').value = year;
+    document.getElementById('month').value = month;
+    document.getElementById('day').value = day;
+    document.getElementById('scheduleModal').style.display = 'block';
+}
