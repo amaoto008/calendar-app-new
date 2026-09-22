@@ -6,17 +6,23 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow-x: auto !important; /* ウィンドウが縮んだ際に横スクロールバーで形を維持 */
 }
+
+/* メインコンテナ */
 .container {
     background: white;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     text-align: center;
-    width: 90%;
-    max-width: 850px;
+    width: 100% !important;
+    max-width: 900px !important;  /* パソコン画面での最大幅 */
+    min-width: 750px !important;  /* これ以上縮まない最小幅 */
+    margin: 20px auto !important;
     position: relative;
 }
+
 input, textarea {
     padding: 8px;
     margin: 5px;
@@ -25,6 +31,7 @@ input, textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 button {
     padding: 8px 15px;
     background-color: #007bff;
@@ -36,83 +43,95 @@ button {
 }
 button:hover { background-color: #0056b3; }
 
+/* ユーザー登録エラー等の注意メッセージ */
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
 /* ========================================================
-   ★カレンダーのサイズ崩れを100%阻止する設定
+   カレンダーテーブル（サイズ完全固定）
    ======================================================== */
 #calendarTable {
-    width: 100%;
+    width: 100% !important;
     border-collapse: collapse;
     margin-top: 20px;
-    table-layout: fixed; /* 【超重要】これを入れることで、文字が長くても絶対に太らなくなります！ */
+    table-layout: fixed !important; /* 横幅の自動伸縮を完全にストップ */
 }
+
 #calendarTable th, #calendarTable td {
     border: 1px solid #ddd;
     padding: 6px 2px;
     text-align: center;
     width: 14.28% !important; /* 7マス均等割りを強制 */
-    height: 95px; /* 予定が見えるように高さを固定 */
+    height: 100px !important; /* 高さを完全固定 */
     position: relative;
-    overflow: hidden; /* マスからはみ出た予定は隠す */
-    vertical-align: top;
+    overflow: hidden;         /* マスからはみ出た要素は隠す */
+    vertical-align: top !important;
     box-sizing: border-box;
 }
+
 #calendarTable td { cursor: pointer; }
 #calendarTable td:hover { background-color: #f5f5f5; }
+
+/* 日付の数字 */
+.date-num {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 4px;
+}
 
 /* 土日の色分け */
 #calendarTable th:nth-child(1), #calendarTable td:nth-child(1) { color: #dc3545; } /* 日曜日は赤 */
 #calendarTable th:nth-child(7), #calendarTable td:nth-child(7) { color: #007bff; } /* 土曜日は青 */
 
 /* ========================================================
-   ★【大修正】予定表示と削除ボタンを絶対に崩さない構造
+   予定（イベント）ボックス ＆ 削除ボタン
    ======================================================== */
 .event {
-    font-size: 12px;
-    font-weight: bold;
-    background-color: #e3f2fd;
-    color: #0d47a1;
-    padding: 3px 6px;
-    border-radius: 4px;
-    margin: 4px auto;
-    width: 95%;
-    box-sizing: border-box;
-
-    /* ボタンと文字を綺麗に並べ、ボタンを絶対に右端に固定して守るための設定 */
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
+    background-color: #e3f2fd !important; /* 提出用に見やすくほんのり青 */
+    color: #0d47a1 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    margin: 3px auto !important;
+    width: 96% !important;
+    box-sizing: border-box !important;
     overflow: hidden !important;
+    font-size: 12px;
+    font-weight: bold;
 }
 
-/* 予定の「テキストの塊」だけに ... の魔法をかけます（これでボタンを押し出しません！） */
+/* 予定の文字切り詰め（...）魔法 */
 .event-text, .schedule-text {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important; /* はみ出たら自動で「...」にする */
-    flex-grow: 1 !important; /* 利用可能な幅をめいいっぱい使う */
+    flex-grow: 1 !important;
     text-align: left !important;
-    display: block !important;
+    display: inline-block !important;
 }
 
-/* 削除ボタン：絶対に縮まない・画面外へ吹き飛ばされないように固定 */
+/* 削除（×）ボタン */
 .delete-button, .delete-btn {
-    background: #ffc107;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    font-size: 9px;
-    padding: 1px 4px;
-    border-radius: 3px;
-    margin-left: 4px;
-    font-weight: normal;
-    flex-shrink: 0 !important; /* ★どれだけ文字が長くても、絶対に縮まない・消えない */
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important; /* 見やすく赤色に */
+    cursor: pointer !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    padding: 0 0 0 4px !important;
+    flex-shrink: 0 !important; /* 文字が長くても絶対に縮まない・消えない */
     display: inline-block !important;
 }
 .delete-button:hover, .delete-btn:hover {
-    background-color: #dc3545;
-    color: white;
+    color: #bd2130 !important;
+    transform: scale(1.2);
 }
 
+/* カレンダー上部コントローラー */
 #controls {
     display: flex;
     justify-content: space-between;
@@ -127,7 +146,16 @@ button:hover { background-color: #0056b3; }
     font-weight: bold;
 }
 
-/* ポップアップ（モーダル） */
+/* ログアウトボタンの配置 */
+#logoutContainer {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+/* ========================================================
+   ポップアップ（モーダル）
+   ======================================================== */
 .modal {
     display: none;
     position: fixed;
@@ -136,6 +164,7 @@ button:hover { background-color: #0056b3; }
     width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.4);
 }
+
 .modal-content {
     background-color: #fefefe;
     margin: 12% auto;
@@ -147,10 +176,19 @@ button:hover { background-color: #0056b3; }
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     text-align: left;
 }
-.modal-content input, .modal-content textarea {
-    width: 100%;
-    max-width: 100%;
+
+/* モーダル内の入力欄の横伸びを完全に阻止 */
+.modal-content input,
+.modal-content textarea,
+#scheduleModal input,
+#scheduleModal textarea {
+    width: 100% !important;
+    max-width: 250px !important; /* 横幅を250pxに制限 */
+    box-sizing: border-box !important;
+    display: block !important;
+    margin: 8px 0 !important;
 }
+
 .close-button {
     color: #aaa;
     float: right;
@@ -160,13 +198,9 @@ button:hover { background-color: #0056b3; }
 }
 .close-button:hover { color: black; }
 
-#logoutContainer {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-}
-
-/* メディアクエリ */
+/* ========================================================
+   メディアクエリ（スマホ・タブレット対応表示）
+   ======================================================== */
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -182,118 +216,4 @@ button:hover { background-color: #0056b3; }
     .event {
         font-size: 11px;
     }
-}
-
-/* ========================================================
-   長い文章による太っちょ化を100%防止し、×ボタンを死守する強制上書き設定
-   ======================================================== */
-
-/* カレンダーの全マスの横幅と高さを完全に固定 */
-#calendarTable {
-    table-layout: fixed !important; /* 横幅の自動伸縮を完全にストップ */
-    width: 100% !important;
-}
-
-#calendarTable td {
-    width: 14.28% !important; /* 7等分 */
-    height: 100px !important; /* 高さを固定 */
-    vertical-align: top !important;
-    overflow: hidden !important; /* 万が一溢れてもマスを広げない */
-}
-
-/* 日付の数字を見やすく配置 */
-.date-num {
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 4px;
-}
-
-/* 予定の箱（文字と×ボタンを絶対にケンカさせない横並び構造） */
-.event {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    background-color: #e3f2fd !important; /* 提出用に見やすくほんのり青に */
-    color: #0d47a1 !important;
-    padding: 2px 6px !important;
-    border-radius: 4px !important;
-    margin: 3px auto !important;
-    width: 96% !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-}
-
-/* 予定の「文字」だけをきれいに途中で切って ... にする魔法 */
-.event-text {
-    white-space: nowrap !important;       /* 絶対に改行させない */
-    overflow: hidden !important;         /* はみ出た文字は隠す */
-    text-overflow: ellipsis !important;  /* 末尾を「...」にする */
-    flex-grow: 1 !important;             /* 使える幅をめいいっぱい広げる */
-    text-align: left !important;
-    display: inline-block !important;
-}
-
-/* バツ（削除）ボタン：絶対に縮まない・画面外へ吹き飛ばされないように右端に固定 */
-.delete-button {
-    background: none !important;
-    border: none !important;
-    color: #dc3545 !important; /* 見やすく赤色に */
-    cursor: pointer !important;
-    font-size: 12px !important;
-    font-weight: bold !important;
-    padding: 0 0 0 4px !important;
-    flex-shrink: 0 !important; /* ★文字がどれだけ長くても、絶対に縮まない・消えない */
-    display: inline-block !important;
-}
-.delete-button:hover {
-    color: #bd2130 !important;
-    transform: scale(1.2);
-}
-
-/* ========================================================
-   ポップアップ（モーダル）内の入力欄が横に伸びるのを防ぐ修正
-   ======================================================== */
-.modal-content input,
-.modal-content textarea,
-#scheduleModal input,
-#scheduleModal textarea {
-    width: 100% !important;     /* 箱のなかいっぱいに広げる */
-    max-width: 250px !important; /* 【★重要】横幅を250pxに制限して、横伸びを完全に阻止します */
-    box-sizing: border-box !important;
-    display: block !important;
-    margin: 8px 0 !important;
-}
-
-/* ========================================================
-   ポップアップ（モーダル）内の入力欄が横に伸びるのを防ぐ修正
-   ======================================================== */
-.modal-content input,
-.modal-content textarea,
-#scheduleModal input,
-#scheduleModal textarea {
-    width: 100% !important;     /* 箱のなかいっぱいに広げる */
-    max-width: 250px !important; /* 【★重要】横幅を250pxに制限して、横伸びを完全に阻止します */
-    box-sizing: border-box !important;
-    display: block !important;
-    margin: 8px 0 !important;
-}
-
-/* ========================================================
-   ブラウザのサイズ変更でカレンダーが伸び縮みするのを完全に固定する設定
-   ======================================================== */
-
-.container {
-    /* パソコンの大画面でも広がりすぎない最大幅 */
-    max-width: 900px !important;
-
-    /* ブラウザを小さくしてもこれ以上は絶対に縮まない最小幅（形を守る防波堤） */
-    min-width: 750px !important;
-
-    width: 100% !important;
-    margin: 20px auto !important; /* 画面中央に配置 */
-}
-
-/* カレンダー全体の横スクロール対策 */
-body {
-    overflow-x: auto !important; /* 万が一ブラウザが750pxより小さくなったら、形を崩さずに横スクロールバーを出して守る */
 }
