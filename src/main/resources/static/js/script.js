@@ -1,15 +1,29 @@
 // 削除イベントをグローバルスコープに公開
 window.deleteEvent = function(dateKey, index) {
-    const events = JSON.parse(localStorage.getItem('events')) || [];
+    const userEventsKey = 'events_' + loggedInUser;
+    const events = JSON.parse(localStorage.getItem(userEventsKey)) || [];
     const dayEvents = events.filter(event => `${event.year}-${event.month}-${event.day}` === dateKey);
     if (index >= 0 && index < dayEvents.length) {
         const eventToRemove = dayEvents[index];
         const eventIndexInEvents = events.findIndex(event => event.id === eventToRemove.id);
         if (eventIndexInEvents !== -1) {
             events.splice(eventIndexInEvents, 1);
-            localStorage.setItem('events', JSON.stringify(events));
+            localStorage.setItem(userEventsKey, JSON.stringify(events));
             window.refreshCalendar();
         }
+    }
+};
+
+// ログインフォームと新規登録フォームの切り替えをグローバルスコープに公開
+window.toggleForm = function() {
+    var loginBox = document.getElementById('loginBox');
+    var registerBox = document.getElementById('registerBox');
+    if (loginBox.style.display === 'block' || loginBox.style.display === '') {
+        loginBox.style.display = 'none';
+        registerBox.style.display = 'block';
+    } else {
+        loginBox.style.display = 'block';
+        registerBox.style.display = 'none';
     }
 };
 
@@ -21,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const scheduleModal = document.getElementById('scheduleModal');
     const closeModal = document.querySelector('.close-button');
     const saveScheduleButton = document.getElementById('saveSchedule');
-    const logoutButton = document.getElementById('logoutButton');
 
     const today = new Date();
     let currentMonth = today.getMonth();
@@ -91,12 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function() {
-            window.location.href = '/logout';
-        });
-    }
-
     if (closeModal) {
         closeModal.onclick = function() {
             scheduleModal.style.display = 'none';
@@ -124,14 +131,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function getEventsForDate(year, month, day) {
-        const events = JSON.parse(localStorage.getItem('events')) || [];
+        const userEventsKey = 'events_' + loggedInUser;
+        const events = JSON.parse(localStorage.getItem(userEventsKey)) || [];
         return events.filter(event => event.year == year && event.month == month && event.day == day);
     }
 
     function saveEvent(event) {
-        const events = JSON.parse(localStorage.getItem('events')) || [];
+        const userEventsKey = 'events_' + loggedInUser;
+        const events = JSON.parse(localStorage.getItem(userEventsKey)) || [];
         events.push(event);
-        localStorage.setItem('events', JSON.stringify(events));
+        localStorage.setItem(userEventsKey, JSON.stringify(events));
     }
 });
 

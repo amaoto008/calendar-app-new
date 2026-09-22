@@ -91,7 +91,7 @@ button:hover { background-color: #0056b3; }
     text-overflow: ellipsis !important; /* はみ出たら自動で「...」にする */
     flex-grow: 1 !important; /* 利用可能な幅をめいいっぱい使う */
     text-align: left !important;
-    display: block !important;
+    display: inline-block !important;
 }
 
 /* 削除ボタン：絶対に縮まない・画面外へ吹き飛ばされないように固定 */
@@ -228,7 +228,7 @@ button:hover { background-color: #0056b3; }
     white-space: nowrap !important;       /* 絶対に改行させない */
     overflow: hidden !important;         /* はみ出た文字は隠す */
     text-overflow: ellipsis !important;  /* 末尾を「...」にする */
-    flex-grow: 1 !important;             /* 使える幅をめいいっぱい広げる */
+    flex-grow: 1 !important;             /* 使える幅をめいいっぱい使う */
     text-align: left !important;
     display: inline-block !important;
 }
@@ -265,20 +265,6 @@ button:hover { background-color: #0056b3; }
 }
 
 /* ========================================================
-   ポップアップ（モーダル）内の入力欄が横に伸びるのを防ぐ修正
-   ======================================================== */
-.modal-content input,
-.modal-content textarea,
-#scheduleModal input,
-#scheduleModal textarea {
-    width: 100% !important;     /* 箱のなかいっぱいに広げる */
-    max-width: 250px !important; /* 【★重要】横幅を250pxに制限して、横伸びを完全に阻止します */
-    box-sizing: border-box !important;
-    display: block !important;
-    margin: 8px 0 !important;
-}
-
-/* ========================================================
    ブラウザのサイズ変更でカレンダーが伸び縮みするのを完全に固定する設定
    ======================================================== */
 
@@ -296,4 +282,9 @@ button:hover { background-color: #0056b3; }
 /* カレンダー全体の横スクロール対策 */
 body {
     overflow-x: auto !important; /* 万が一ブラウザが750pxより小さくなったら、形を崩さずに横スクロールバーを出して守る */
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
 }
