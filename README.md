@@ -45,7 +45,7 @@ Spring Boot 3.x と Spring Security を採用した、堅牢でモダンな**ア
 2. `カレンダー起動.command` をダブルクリックします。
 3. 自動的に Safari などのブラウザが立ち上がり、`http://localhost:8085/login` が開きます。
 
-### 🪟 Windowsでの起動手順
+###  Windowsでの起動手順
 1. `カレンダー起動.bat` をダブルクリックします。
 2. 自動的に Edge や Chrome が立ち上がり、`http://localhost:8085/login` が開きます。
 
