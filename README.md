@@ -4,13 +4,8 @@ Spring Boot 3.x と Spring Security を採用した、堅牢でモダンな**ア
 独自のログイン認証と新規ユーザー登録機能を備え、ブラウザの LocalStorage を活用して**ログイン中のユーザーごとに予定が完全に隔離・保存される**プライベートカレンダーシステムを構築しています。
 
 ---
-<div style="text-align: center;">
-  <img src="images/main.png" alt="メイン画面" style="vertical-align: middle; width: 25%; margin-right: 15px;">
-  <img src="images/login.png" alt="ログイン画面" style="vertical-align: middle; width: 25%; margin-right: 15px;">
-  <img src="images/registration.png" alt="ユーザー登録画面" style="vertical-align: middle; width: 25%;">
-</div>
-
-
+| <img src="images/main.png" alt="メイン画面" style="width: 100%; max-width: 250px; vertical-align: middle;"> | <img src="images/login.png" alt="ログイン画面" style="width: 100%; max-width: 250px; vertical-align: middle;"> | <img src="images/registration.png" alt="ユーザー登録画面" style="width: 100%; max-width: 250px; vertical-align: middle;"> |
+| :---: | :---: | :---: |
 
 ---
 ##  主な機能
